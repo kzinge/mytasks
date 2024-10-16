@@ -1,0 +1,36 @@
+{% extends 'modelo.html' %}
+
+{% block title %}
+    Login
+{% endblock %}
+
+{% block nav_bar %}
+    <li><a href="/" class="btn btn-outline-secondary">Início</a></li>
+    <li><a href="{{url_for('login')}}" class="btn btn-dark">Login</a></li>
+    <li><a href="{{url_for('register')}}" class="btn btn-outline-secondary">Cadastro</a></li>
+{% endblock %}
+
+{% block conteudo %}
+    <div class="forms">
+        <form class="form-dados" method="post" action="{{url_for('login')}}">
+            <div class="mb-3">
+            <label for="email" class="form-label">E-mail</label>
+            <input type="email" class="form-control" id="email" name="email" placeholder="Digite seu e-mail" required>
+            </div>
+            <div class="mb-3">
+            <label for="senha" class="form-label">Password</label>
+            <input type="password" class="form-control" id="senha" name="senha" placeholder="Digite sua senha" required>
+            </div>
+            <button type="submit" class="btn btn-dark">Entrar</button>
+            {% with avisos = get_flashed_messages() %}
+            {% if avisos %}
+                <ul class="avisos">
+                {% for aviso in avisos %}
+                    <li class="avisos-lista">{{ aviso|safe }}</li>
+                {% endfor %}
+                </ul>
+            {% endif %}
+            {% endwith %}
+      </form>
+    </div>
+{% endblock %}

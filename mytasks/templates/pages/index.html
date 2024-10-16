@@ -1,0 +1,20 @@
+{% extends 'modelo.html' %}
+
+{% block title %}
+MyTasks
+{% endblock %}
+
+{% block nav_bar %}
+    <li><a href="{{url_for('register')}}" class="btn btn-outline-secondary">Cadastro</a></li>
+    <li><a href="/" class="btn btn-dark">Início</a></li>
+    <li><a href="{{url_for('login')}}" class="btn btn-outline-secondary">Login</a></li>
+{% endblock %}
+
+{% block conteudo %}
+    <main id="main-index">
+        <div id="index-cont">
+            <h1 id="index-title">BEM VINDO AO MYTASKS</h1>
+            <p>Aqui no mytasks você poderá gerenciar suas tarefas diárias</p>
+        </div>
+    </main>
+{% endblock %}
