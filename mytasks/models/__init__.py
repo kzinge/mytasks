@@ -8,8 +8,8 @@ app = Flask(__name__)
 conexao = MySQL(app)
 
 #configurações necessárias para usar o mysql:
-app.config['MYSQL_USER'] = 'root'
-app.config['MYSQL_PASSWORD'] = ''
+app.config['MYSQL_USER'] = 'kauan'
+app.config['MYSQL_PASSWORD'] = 'kauan123'
 app.config['MYSQL_DB'] = 'db_mytasks'
 app.config['MYSQL_CURSORCLASS'] = 'DictCursor'
 

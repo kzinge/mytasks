@@ -10,7 +10,7 @@ login_manager.init_app(app) #Configura app para trabalhar junto com flask-login
 
 #configurações necessárias para usar o mysql:
 app.config['MYSQL_USER'] = 'root'
-app.config['MYSQL_PASSWORD'] = ''
+app.config['MYSQL_PASSWORD'] = 'kauan123'
 app.config['MYSQL_DB'] = 'db_mytasks'
 app.config['MYSQL_CURSORCLASS'] = 'DictCursor'
 conexao = MySQL(app)
@@ -64,6 +64,14 @@ def login():
         return render_template('pages/login.html')
  
 @app.route('/inicio', methods = ['POST', 'GET'])
+@login_required
 def dash():
     return render_template('pages/dash.html')
 
+@app.route('/novatask', methods = ['POST', 'GET'])
+@login_required
+def newtask():
+    if request.method == 'GET':
+        return render_template('pages/newtask.html')
+    else:
+        pass

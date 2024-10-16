@@ -6,9 +6,11 @@ MyTasks
 
 {% block nav_bar %}
     <li><a href="{{url_for('dash')}}" class="btn btn-dark">Início</a></li>
-    <li><a href="{{url_for('register')}}" class="btn btn-outline-secondary">Nova Task</a></li>
+    <li><a href="{{url_for('newtask')}}" class="btn btn-outline-secondary">Nova Task</a></li>
     <li><a href="{{url_for('login')}}" class="btn btn-outline-secondary">Logout</a></li>
 {% endblock %}
+
+<h1>Olá, {{nome}}</h1>
 
 {% block conteudo %}
 
