@@ -8,8 +8,8 @@ app = Flask(__name__)
 conexao = MySQL(app)
 
 #configurações necessárias para usar o mysql:
-app.config['MYSQL_USER'] = 'kauan'
-app.config['MYSQL_PASSWORD'] = 'kauan123'
+app.config['MYSQL_USER'] = 'root'
+app.config['MYSQL_PASSWORD'] = ''
 app.config['MYSQL_DB'] = 'db_mytasks'
 app.config['MYSQL_CURSORCLASS'] = 'DictCursor'
 
@@ -25,19 +25,22 @@ class User(UserMixin): #definindo a classe usuario
     _hash : str
     def __init__(self, **kwargs):
         self._id = None
+        self._nome = None
+        self._email = None
+        self._senha = None  # Adicionei _email e _senha para completar
 
-        if 'usu_id' in kwargs.keys(): #id do usuario
-            self._id = kwargs.keys()
-        if 'usu_nome' in kwargs.keys():
-            self._nome = kwargs['usu_nome'] #nome do usuario
-        if 'usu_email' in kwargs.keys():
-            self._email = kwargs['usu_email'] #email do usuario
-        if 'usu_senha' in kwargs.keys():
-            self._senha = kwargs['usu_senha'] #senha(hash) do usuario
-        
-    # 5 - sobresrever get id do UserMixin
+        if 'usu_id' in kwargs:  # ID do usuário
+            self._id = kwargs['usu_id']
+        if 'usu_nome' in kwargs:  # Nome do usuário
+            self._nome = kwargs['usu_nome']
+        if 'usu_email' in kwargs:  # Email do usuário
+            self._email = kwargs['usu_email']
+        if 'usu_senha' in kwargs:  # Senha (hash) do usuário
+            self._senha = kwargs['usu_senha']
+
     def get_id(self):
         return str(self._id)
+
     
     # ----------métodos para manipular o banco--------------#
     def save(self):   #Salvar os dados  
@@ -89,3 +92,25 @@ class User(UserMixin): #definindo a classe usuario
         user = cursor.fetchone()
         cursor.close()
         return user
+    
+    
+    
+     # ----------métodos para manipular as tarefas--------------#
+
+    @classmethod
+    def save_task(cls, titulo, descricao, status, prioridade, data_criacao, data_limite, categoria, usuario):
+        cursor = get_conexao()
+        cursor.execute("""INSERT INTO tb_tarefas(tar_titulo, tar_descricao, tar_status, tar_prioridade, tar_data, tar_data_limite, tar_cat_id, tar_usu_id) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)""",
+                        (titulo, descricao, status, prioridade, data_criacao, data_limite, categoria, usuario))
+        commit_con()
+        cursor.close()
+        return True
+    
+    @classmethod
+    def get_tasks(cls, id):
+        cursor = get_conexao()
+        cursor.execute("""SELECT * FROM tb_tarefas WHERE tar_usu_id = %s""", (id,))
+        tarefas = cursor.fetchall()
+
+        cursor.close()
+        return tarefas

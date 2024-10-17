@@ -9,8 +9,8 @@ body{
 }
 
 article{
-    display: flex;
-    height: 100vh;
+    height: 100%;
+    width: 100%;
 }
 
 ul{
@@ -50,19 +50,73 @@ nav{
 
 .forms{
     display: flex;
-    align-items: flex-start;
-    justify-content: center;
+    align-items: center;
+    flex-direction: column;
     width: 100%;
+    margin-top: 3rem;
+    height: 70%;
 }
 
 form{
     margin-top: 100px;
-    padding: 20px;
     width: 18%;
     border: 1px solid grey;
     border-radius: 10px;
-
-    & 
+    box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px, rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
 }
 
+/* Criar Tarefas */
+
+#nt-form{
+    margin-top: 10px;
+    width: 70%;
+    height: 60%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    align-items: flex-start;
+
+    & #nt-conteudo{
+        width: 90%;
+        padding: 1rem;
+        height: 100%;
+    }
+
+    & #nt-titulo input{
+        border: none;
+        outline: none;
+        font-size: 20pt
+    }
+
+    & #nt-texto{
+        height: 90%;
+    }
+
+    & #nt-texto textarea {
+        height: 95%;
+        width: 100%;
+        border: none;
+        outline: none;
+        box-shadow: none;
+        resize: none;
+    }
+
+
+
+    & #nt-infos{
+        display: inline-flex;
+        justify-content: space-around;
+        height: 100%;
+        border-radius: 10px;
+        flex-direction: column;
+        padding: 1rem;
+        background-color: black;
+    }
+
+    & #nt-infos label{
+        color: white;
+        font-weight: 600;
+    }
+
+}
 

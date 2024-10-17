@@ -7,11 +7,33 @@ MyTasks
 {% block nav_bar %}
     <li><a href="{{url_for('dash')}}" class="btn btn-dark">Início</a></li>
     <li><a href="{{url_for('newtask')}}" class="btn btn-outline-secondary">Nova Task</a></li>
-    <li><a href="{{url_for('login')}}" class="btn btn-outline-secondary">Logout</a></li>
+    <li><a href="{{url_for('logout')}}" class="btn btn-outline-secondary">Logout</a></li>
 {% endblock %}
 
-<h1>Olá, {{nome}}</h1>
-
 {% block conteudo %}
-
+<h1>Olá, {{nome}}</h1>
+    <div class="row row-cols-1 row-cols-md-3 g-4" id="tarefas-dash">
+        <ul>
+            {%for tarefa in tarefas%}
+            <li id="lista-tarefas">
+                <div class="card" style="max-width: 18rem;">
+                    <div class="card-header"></div>
+                    <div class="card-body">
+                      <h5 class="card-title">{{tarefa['tar_titulo']}}</h5>
+                      <p class="card-text">{{tarefa['tar_descricao']}}</p>
+                    </div>
+                    <div class="card-header">
+                        <ul>
+                            <li>Status: {{tarefa['tar_status']}} </li>
+                            <li>Categoria: {{tarefa['tar_categoria']}}</li>
+                            <li>Prioridade: {{tarefa['tar_prioridade']}}</li>
+                            <li>Criação: {{tarefa['tar_data']}}</li>
+                            <li><a href="#">+Infos</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </li>
+            {%endfor%}
+        </ul>
+    </div>
 {% endblock %}

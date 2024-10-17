@@ -3,6 +3,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from models import User
 from flask_login import LoginManager, login_user, login_required, logout_user, current_user
 from flask_mysqldb import MySQL
+from datetime import datetime
 
 app = Flask(__name__)
 login_manager = LoginManager()
@@ -10,7 +11,7 @@ login_manager.init_app(app) #Configura app para trabalhar junto com flask-login
 
 #configurações necessárias para usar o mysql:
 app.config['MYSQL_USER'] = 'root'
-app.config['MYSQL_PASSWORD'] = 'kauan123'
+app.config['MYSQL_PASSWORD'] = ''
 app.config['MYSQL_DB'] = 'db_mytasks'
 app.config['MYSQL_CURSORCLASS'] = 'DictCursor'
 conexao = MySQL(app)
@@ -66,7 +67,9 @@ def login():
 @app.route('/inicio', methods = ['POST', 'GET'])
 @login_required
 def dash():
-    return render_template('pages/dash.html')
+    tarefas = User.get_tasks(current_user._id)
+    nome = current_user._nome
+    return render_template('pages/dash.html', tarefas = tarefas, nome = nome)
 
 @app.route('/novatask', methods = ['POST', 'GET'])
 @login_required
@@ -74,4 +77,22 @@ def newtask():
     if request.method == 'GET':
         return render_template('pages/newtask.html')
     else:
-        pass
+        titulo = request.form['titulo']
+        descricao = request.form['conteudo']
+        status = request.form['status']
+        prioridade = request.form['prioridade']
+        categoria = request.form['categoria']
+        data_limite_srt = request.form['data-limite']
+        data_limite = datetime.strptime(data_limite_srt, '%Y-%m-%d').date()
+        data_criacao = datetime.now()
+
+        if User.save_task(titulo, descricao, status, prioridade, data_criacao, data_limite, categoria, current_user._id):
+            return redirect(url_for('dash'))
+        else:
+            return "Erro ao cadastrar tarefa."
+
+@app.route('/logout', methods=['POST', 'GET'])
+@login_required
+def logout():
+    logout_user()
+    return redirect(url_for('index'))

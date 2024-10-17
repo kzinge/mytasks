@@ -7,18 +7,56 @@
 {% block nav_bar %}
     <li><a href="{{url_for('dash')}}" class="btn btn-outline-secondary">Início</a></li>
     <li><a href="{{url_for('newtask')}}" class="btn btn-dark">Nova Tarefa</a></li>
-    <li><a href="{{url_for('login')}}" class="btn btn-outline-secondary">Logout</a></li>
+    <li><a href="{{url_for('logout')}}" class="btn btn-outline-secondary">Logout</a></li>
 {% endblock %}
 
 {% block conteudo %}
     <div class="forms">
         <h1>Crie uma nova tarefa!</h1>
-        <form class="form-dados" method="post" action="{{url_for('register')}}">
-            <div id = 'nt-titulo'>
-                
+        <form method="post" action="{{url_for('newtask')}}" id="nt-form">
+            <div id="nt-conteudo">
+                <div id ='nt-titulo' class="col-md-6">
+                    <input type="text" name="titulo" id="titulo" placeholder="Título">
+                </div>
+                <div id="nt-texto">
+                    <textarea name="conteudo" aria-label="With textarea" required placeholder="O que você vai fazer?"></textarea>
+                </div>
             </div>
+            <div id="nt-infos">
+                <div id="nt-status">
+                    <label for="nt-status-box">Selecione o status:</label>
+                    <select name="status" id="nt-status" required class="form-select">
+                        <option value="" disabled selected >Status</option>
+                        <option value="Concluída">Concluída</option>
+                        <option value="Fazendo">Fazendo</option>
+                        <option value="Pendente">Pendente</option>
+                    </select>
+                </div>
+                <div id="nt-prioridade">
+                    <label for="nt-prioridade-box">Selecione a prioridade:</label>
+                    <select name="prioridade" id="nt-prioridade" required class="form-select">
+                        <option value="" disabled selected >Prioridade</option>
+                        <option value="Alta">Alta</option>
+                        <option value="Média">Média</option>
+                        <option value="Baixa">Baixa</option>
+                    </select>
+                </div>
+                <div id="nt-categoria">
+                    <label for="nt-categoria-box">Selecione a categoria:</label>
+                    <select name="categoria" id="nt-categoria" required class="form-select">
+                        <option value="" disabled selected >Categoria</option>
+                        <option value="1">Trabalho</option>
+                        <option value="2">Estudo</option>
+                        <option value="3">Pessoal</option>
+                    </select>
+                </div>
 
-            <button type="submit" class="btn btn-dark">Cadastrar</button>
+                <div id="nt-data-limite" class="col-md-6">
+                    <label for="data-limite">Data Limite:</label>
+                    <input type="date" name="data-limite" id="data-limite">
+                </div>
+                <button type="submit" class="btn btn-light">Cadastrar</button>
+            </div>
       </form>
       {% with avisos = get_flashed_messages() %}
       {% if avisos %}
