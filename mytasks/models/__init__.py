@@ -79,7 +79,7 @@ class User(UserMixin): #definindo a classe usuario
     
     @classmethod
     def all(cls): #Pegar todos os dados
-        cursor = get_conexao
+        cursor = get_conexao()
         cursor.execute("SELECT usu_id, usu_nome, usu_email FROM tb_usuarios")
         users = cursor.fetchall()
         cursor.close()
