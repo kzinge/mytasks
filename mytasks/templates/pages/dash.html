@@ -12,6 +12,55 @@ MyTasks
 
 {% block conteudo %}
 <h1>Olá, {{nome}}</h1>
+
+<div class="forms">
+    <h2>deseja filtrar suas tarefas?</h2> 
+    <form method="post" action="{{url_for('dash')}}" id="nt-form">
+        <div id="nt-infos">
+            <div id="nt-status">
+                <label for="nt-status-box">Selecione o status:</label>
+                <select name="status" id="nt-status" class="form-select">
+                    <option value="" disabled selected >Status</option>
+                    <option value="Concluida">Concluída</option> <!-- tirei o acento do value -->
+                    <option value="Fazendo">Fazendo</option>
+                    <option value="Pendente">Pendente</option>
+                </select>
+            </div>
+            <div id="nt-prioridade">
+                <label for="nt-prioridade-box">Selecione a prioridade:</label>
+                <select name="prioridade" id="nt-prioridade"  class="form-select">
+                    <option value="" disabled selected >Prioridade</option>
+                    <option value="Alta">Alta</option>
+                    <option value="Media">Média</option> <!-- mudei o value de média pra media -->
+                    <option value="Baixa">Baixa</option>
+                </select>
+            </div>
+            <div id="nt-categoria">
+                <label for="nt-categoria-box">Selecione a categoria:</label>
+                <select name="categoria" id="nt-categoria"  class="form-select">
+                    <option value="" disabled selected >Categoria</option>
+                    <option value="1">Trabalho</option>
+                    <option value="2">Estudo</option>
+                    <option value="3">Pessoal</option>
+                </select>
+            </div>
+
+            
+            <div id="nt-data-criacao" class="col-md-6"> <!-- id que nao existe no css -->
+                <label for="data-criacao">Data de criação:</label>
+                <input type="date" name="data-criacao" id="data-criacao">
+            </div>
+            
+
+            <div id="nt-data-limite" class="col-md-6">
+                <label for="data-limite">Data Limite:</label>
+                <input type="date" name="data-limite" id="data-limite">
+            </div>
+            <button type="submit" class="btn btn-light">filtrar</button>
+        </div>
+    </form>
+</div>
+
     <div class="row row-cols-1 row-cols-md-3 g-4" id="tarefas-dash">
         <ul>
             {%for tarefa in tarefas%}
