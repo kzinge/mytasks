@@ -67,9 +67,22 @@ def login():
 @app.route('/inicio', methods = ['POST', 'GET'])
 @login_required
 def dash():
-    tarefas = User.get_tasks(current_user._id)
+   if request.method == 'POST':
+        status = request.form.get('status') or None #tenta pegar o valor, se n tiver status=None
+        prioridade = request.form.get('prioridade') or None
+        categoria = request.form.get('categoria') or None
+        data_limite_srt = request.form.get('data-limite') or None
+        data_criacao_srt = request.form.get('data-criacao') or None
+        
+        data_limite = datetime.strptime(data_limite_srt, '%Y-%m-%d').date() if data_limite_srt else None
+        data_criacao = datetime.strptime(data_criacao_srt, '%Y-%m-%d').date() if data_criacao_srt else None
+
+        tarefas = User.get_filtros(current_user._id, status=status, prioridade=prioridade, categoria=categoria, data_limite=data_limite, data_criacao=data_criacao)
+    else:
+        tarefas = User.get_tasks(current_user._id)
+    
     nome = current_user._nome
-    return render_template('pages/dash.html', tarefas = tarefas, nome = nome)
+    return render_template('pages/dash.html', tarefas=tarefas, nome=nome)
 
 @app.route('/novatask', methods = ['POST', 'GET'])
 @login_required
