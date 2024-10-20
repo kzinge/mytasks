@@ -109,8 +109,38 @@ class User(UserMixin): #definindo a classe usuario
     @classmethod
     def get_tasks(cls, id):
         cursor = get_conexao()
-        cursor.execute("""SELECT * FROM tb_tarefas WHERE tar_usu_id = %s""", (id,))
+        cursor.execute("""SELECT tar_titulo, tar_descricao, tar_status, cat_categoria, tar_prioridade, tar_data, tar_data_limite FROM tb_tarefas JOIN tb_categorias ON tar_cat_id=cat_id WHERE tar_usu_id = %s""", (id,))
         tarefas = cursor.fetchall()
 
+        cursor.close()
+        return tarefas
+        
+    @classmethod
+    def get_filtros(cls, id, status=None, prioridade=None, categoria=None, data_limite=None, data_criacao=None):
+        cursor = get_conexao()
+
+        # Query base
+        query = "SELECT * FROM tb_tarefas WHERE tar_usu_id = %s"
+        params = [id] #lista com os parametros
+
+        # Condições opcionais
+        if status: #se tiver sido passado algum status
+            query += " AND tar_status = %s" #adiciona à query
+            params.append(status) #adiciona o parametro a lista de parâmetros
+        if prioridade:
+            query += " AND tar_prioridade = %s"
+            params.append(prioridade)
+        if categoria:
+            query += " AND tar_cat_id= %s"
+            params.append(categoria)
+        if data_limite:
+            query += " AND tar_data_limite = %s"
+            params.append(data_limite)
+        if data_criacao:
+            query += " AND tar_data = %s"
+            params.append(data_criacao)
+
+        cursor.execute(query, params)
+        tarefas = cursor.fetchall()
         cursor.close()
         return tarefas
