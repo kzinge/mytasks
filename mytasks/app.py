@@ -35,7 +35,7 @@ def register():
         nome = request.form['nome']
         email = request.form['email']
         senha = generate_password_hash(request.form['senha'])
-        if not User.exists(nome): #Se o usuário não tiver cadastro
+        if not User.exists(email): #Se o usuário não tiver cadastro
             user = User(usu_nome = nome, usu_email = email, usu_senha = senha)
             user.save()
             # Logar o usuário depois de cadastrar
