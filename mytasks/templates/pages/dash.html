@@ -63,26 +63,36 @@ MyTasks
 
     <div class="row row-cols-1 row-cols-md-3 g-4" id="tarefas-dash">
         <ul>
-            {%for tarefa in tarefas%}
-            <li id="lista-tarefas">
-                <div class="card" style="max-width: 18rem;">
-                    <div class="card-header"></div>
-                    <div class="card-body">
-                      <h5 class="card-title">{{tarefa['tar_titulo']}}</h5>
-                      <p class="card-text">{{tarefa['tar_descricao']}}</p>
+            {% if tarefas %}
+                {%for tarefa in tarefas%}
+                <li id="lista-tarefas">
+                    <div class="card" style="max-width: 18rem;">
+                        <div class="card-header"></div>
+                        <div class="card-body">
+                          <h5 class="card-title">{{tarefa['tar_titulo']}}</h5>
+                          <p class="card-text">{{tarefa['tar_descricao']}}</p>
+                        </div>
+                        <div class="card-header">
+                            <ul>
+                                <li>Status: {{tarefa['tar_status']}} </li>
+                                <li>Categoria: {{tarefa['cat_categoria']}}</li>
+                                <li>Prioridade: {{tarefa['tar_prioridade']}}</li>
+                                <li>Criação: {{tarefa['tar_data']}}</li>
+                                <li>Vencimento: {{tarefa['tar_data_limite']}}</li>
+                                <li><a href="{{ url_for('edit_task', task_id=tarefa['tar_id']) }}">editar</a></li> 
+                                <li>
+                                    <form action="{{ url_for('delete_task', task_id=tarefa.tar_id) }}" method="POST" onsubmit="return confirm('Tem certeza que deseja deletar esta tarefa?');">
+                                        <button type="submit" class="btn btn-danger btn-sm">Deletar</button>
+                                    </form>
+                                </li>
+                            </ul>
+                        </div>
                     </div>
-                    <div class="card-header">
-                        <ul>
-                            <li>Status: {{tarefa['tar_status']}} </li>
-                            <li>Categoria: {{tarefa['tar_categoria']}}</li>
-                            <li>Prioridade: {{tarefa['tar_prioridade']}}</li>
-                            <li>Criação: {{tarefa['tar_data']}}</li>
-                            <li><a href="#">+Infos</a></li>
-                        </ul>
-                    </div>
-                </div>
-            </li>
-            {%endfor%}
+                </li>
+                {%endfor%}
+            {% else %}
+                <h2>não há tarefas que se encaixem nesse filtro</h2>
+            {% endif %}
         </ul>
     </div>
 {% endblock %}
