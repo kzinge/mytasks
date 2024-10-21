@@ -1,0 +1,62 @@
+{% extends 'modelo.html' %}
+
+{% block title %}
+Editar Tarefa
+{% endblock %}
+
+{% block nav_bar %}
+    <li><a href="{{url_for('dash')}}" class="btn btn-dark">Início</a></li>
+    <li><a href="{{url_for('newtask')}}" class="btn btn-outline-secondary">Nova Task</a></li>
+    <li><a href="{{url_for('logout')}}" class="btn btn-outline-secondary">Logout</a></li>
+{% endblock %}
+
+{% block conteudo %}
+    <div class="forms">
+        <h1>Edite sua tarefa!</h1>
+        <form method="post" action="{{url_for('edit_task', task_id=tarefa['tar_id'])}}" id="nt-form">
+            <div id="nt-conteudo">
+                <div id='nt-titulo' class="col-md-6">
+                    <input type="text" name="titulo" id="titulo" placeholder="Título" value="{{ tarefa['tar_titulo'] }}">
+                </div>
+                <div id="nt-texto">
+                    <textarea name="conteudo" aria-label="With textarea" required placeholder="O que você vai fazer?">{{ tarefa['tar_descricao'] }}</textarea>
+                </div>
+            </div>
+            <div id="nt-infos">
+                <div id="nt-status">
+                    <label for="nt-status-box">Selecione o status:</label>
+                    <select name="status" id="nt-status" required class="form-select">
+                        <option value="" disabled>Status</option>
+                        <option value="Concluida" {% if tarefa['tar_status'] == 'Concluida' %} selected {% endif %}>Concluída</option> #adiciona a opção selected se esse dado constar na tarefa atual
+                        <option value="Fazendo" {% if tarefa['tar_status'] == 'Fazendo' %} selected {% endif %}>Fazendo</option>
+                        <option value="Pendente" {% if tarefa['tar_status'] == 'Pendente' %} selected {% endif %}>Pendente</option>
+                    </select>
+                </div>
+                <div id="nt-prioridade">
+                    <label for="nt-prioridade-box">Selecione a prioridade:</label>
+                    <select name="prioridade" id="nt-prioridade" required class="form-select">
+                        <option value="" disabled>Prioridade</option>
+                        <option value="Alta" {% if tarefa['tar_prioridade'] == 'Alta' %} selected {% endif %}>Alta</option>
+                        <option value="Media" {% if tarefa['tar_prioridade'] == 'Media' %} selected {% endif %}>Média</option>
+                        <option value="Baixa" {% if tarefa['tar_prioridade'] == 'Baixa' %} selected {% endif %}>Baixa</option>
+                    </select>
+                </div>
+                <div id="nt-categoria">
+                    <label for="nt-categoria-box">Selecione a categoria:</label>
+                    <select name="categoria" id="nt-categoria" required class="form-select">
+                        <option value="" disabled>Categoria</option>
+                        <option value="1" {% if tarefa['tar_cat_id'] == 1 %} selected {% endif %}>Trabalho</option>
+                        <option value="2" {% if tarefa['tar_cat_id'] == 2 %} selected {% endif %}>Estudo</option>
+                        <option value="3" {% if tarefa['tar_cat_id'] == 3 %} selected {% endif %}>Pessoal</option>
+                    </select>
+                </div>
+
+                <div id="nt-data-limite" class="col-md-6">
+                    <label for="data-limite">Data Limite:</label>
+                    <input type="date" name="data-limite" id="data-limite" value="{{ tarefa['tar_data_limite'] }}">
+                </div>
+                <button type="submit" class="btn btn-light">Salvar alterações</button>
+            </div>
+        </form>
+    </div>
+{% endblock %}
