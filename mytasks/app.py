@@ -84,6 +84,7 @@ def dash():
     nome = current_user._nome
     return render_template('pages/dash.html', tarefas=tarefas, nome=nome)
 
+
 @app.route('/novatask', methods = ['POST', 'GET'])
 @login_required
 def newtask():
@@ -103,6 +104,46 @@ def newtask():
             return redirect(url_for('dash'))
         else:
             return "Erro ao cadastrar tarefa."
+
+
+@app.route('/edit_task/<int:task_id>', methods=['GET', 'POST']) #rota dinâmica com o id da task na url
+@login_required
+def edit_task(task_id):
+    if request.method == 'GET':
+        tarefa = User.get_task_by_id(task_id) #Obtém os dados da tarefa pelo ID
+        if tarefa and tarefa['tar_usu_id'] == current_user._id: #verifica se a tarefa pertence ao usuário
+            return render_template('pages/edittask.html', tarefa=tarefa)
+        else:
+            flash("Tarefa não encontrada ou você não tem permissão para editá-la.", 'error')
+            return redirect(url_for('dash'))
+    else:
+        #atualiza a tarefa com os novos dados do formulário
+        titulo = request.form['titulo']
+        descricao = request.form['conteudo']
+        status = request.form['status']
+        prioridade = request.form['prioridade']
+        categoria = request.form['categoria']
+        data_limite_srt = request.form['data-limite']
+        data_limite = datetime.strptime(data_limite_srt, '%Y-%m-%d').date() 
+
+        if User.update_task(task_id, titulo, descricao, status, prioridade, categoria, data_limite):
+            flash("Tarefa atualizada com sucesso!", 'success')
+            return redirect(url_for('dash'))
+        else:
+            flash("Erro ao atualizar a tarefa.", 'error')
+            return redirect(url_for('edit_task', task_id=task_id))
+
+
+@app.route('/delete_task/<int:task_id>', methods=['POST']) 
+@login_required
+def delete_task(task_id):
+    # Deleta a tarefa específica
+    if User.delete_task(task_id):
+        flash("Tarefa deletada com sucesso!", 'success')
+    else:
+        flash("Erro ao deletar tarefa.", 'error')
+    return redirect(url_for('dash'))
+    
 
 @app.route('/logout', methods=['POST', 'GET'])
 @login_required
