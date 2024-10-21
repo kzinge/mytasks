@@ -144,3 +144,42 @@ class User(UserMixin): #definindo a classe usuario
         tarefas = cursor.fetchall()
         cursor.close()
         return tarefas
+        
+    @classmethod
+    def get_task_by_id(cls, task_id): #pega a tarefa pelo id
+        cursor = get_conexao()
+        cursor.execute("SELECT * FROM tb_tarefas WHERE tar_id = %s", (task_id,))
+        tarefa = cursor.fetchone()
+        cursor.close()
+        return tarefa
+
+    
+    @classmethod
+    def update_task(cls, task_id, titulo, descricao, status, prioridade, categoria, data_limite):
+        cursor = get_conexao()
+        try:
+            cursor.execute("""UPDATE tb_tarefas 
+                              SET tar_titulo = %s, tar_descricao = %s, tar_status = %s, tar_prioridade = %s, tar_cat_id = %s, tar_data_limite = %s 
+                              WHERE tar_id = %s""",
+                           (titulo, descricao, status, prioridade, categoria, data_limite, task_id))
+            commit_con()
+        except:
+            print(f"Erro ao atualizar tarefa")
+            return False
+        finally:
+            cursor.close()
+        return True
+
+        
+    @classmethod
+    def delete_task(cls, task_id):
+       cursor = get_conexao()
+        try:
+            cursor.execute("DELETE FROM tb_tarefas WHERE tar_id = ?", (task_id,))
+            commit_con()
+        except:
+            print(f"Erro ao excluir tarefa")
+            return False
+        finally:
+            cursor.close()
+        return True
