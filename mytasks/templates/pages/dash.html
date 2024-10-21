@@ -11,52 +11,57 @@ MyTasks
 {% endblock %}
 
 {% block conteudo %}
-<h1>Olá, {{nome}}</h1>
 
-<div class="forms">
-    <h2>deseja filtrar suas tarefas?</h2> 
-    <form method="post" action="{{url_for('dash')}}" id="nt-form">
-        <div id="nt-infos">
-            <div id="nt-status">
-                <label for="nt-status-box">Selecione o status:</label>
-                <select name="status" id="nt-status" class="form-select">
-                    <option value="" disabled selected >Status</option>
-                    <option value="Concluída">Concluída</option> <!-- tlvz seja necessário tirar o acento do value -->
-                    <option value="Fazendo">Fazendo</option>
-                    <option value="Pendente">Pendente</option>
-                </select>
-            </div>
-            <div id="nt-prioridade">
-                <label for="nt-prioridade-box">Selecione a prioridade:</label>
-                <select name="prioridade" id="nt-prioridade"  class="form-select">
-                    <option value="" disabled selected >Prioridade</option>
-                    <option value="Alta">Alta</option>
-                    <option value="Média">Média</option> <!--  tlvz seja necessário tirar o acento do value -->
-                    <option value="Baixa">Baixa</option>
-                </select>
-            </div>
-            <div id="nt-categoria">
-                <label for="nt-categoria-box">Selecione a categoria:</label>
-                <select name="categoria" id="nt-categoria"  class="form-select">
-                    <option value="" disabled selected >Categoria</option>
-                    <option value="1">Trabalho</option>
-                    <option value="2">Estudo</option>
-                    <option value="3">Pessoal</option>
-                </select>
-            </div>
-
-            
-            <div id="nt-data-criacao" class="col-md-6"> <!-- id que nao existe no css -->
-                <label for="data-criacao">Data de criação:</label>
-                <input type="date" name="data-criacao" id="data-criacao">
+<div class="forms" id='busca'>
+    <h2>Busque por suas tarefas</h2> 
+    <form method="post" action="{{url_for('dash')}}" id="bu-form">
+        <div id="bu-infos">
+            <div class="bu-selects">
+                <div id="nt-status">
+                    <label for="nt-status-box">Selecione o status:</label>
+                    <select name="status" id="nt-status" class="form-select">
+                        <option value="" disabled selected >Status</option>
+                        <option value="Concluída">Concluída</option> <!-- tlvz seja necessário tirar o acento do value -->
+                        <option value="Fazendo">Fazendo</option>
+                        <option value="Pendente">Pendente</option>
+                    </select>
+                </div>
+                <div id="nt-prioridade">
+                    <label for="nt-prioridade-box">Selecione a prioridade:</label>
+                    <select name="prioridade" id="nt-prioridade"  class="form-select">
+                        <option value="" disabled selected >Prioridade</option>
+                        <option value="Alta">Alta</option>
+                        <option value="Média">Média</option> <!--  tlvz seja necessário tirar o acento do value -->
+                        <option value="Baixa">Baixa</option>
+                    </select>
+                </div>
+                <div id="nt-categoria">
+                    <label for="nt-categoria-box">Selecione a categoria:</label>
+                    <select name="categoria" id="nt-categoria"  class="form-select">
+                        <option value="" disabled selected >Categoria</option>
+                        <option value="1">Trabalho</option>
+                        <option value="2">Estudo</option>
+                        <option value="3">Pessoal</option>
+                    </select>
+                </div>
             </div>
             
-
-            <div id="nt-data-limite" class="col-md-6">
-                <label for="data-limite">Data Limite:</label>
-                <input type="date" name="data-limite" id="data-limite">
+            <div class="bu-datas">
+                <div id="nt-data-criacao" class="col-md-6"> <!-- id que nao existe no css -->
+                    <label for="data-criacao">Data de criação:</label>
+                    <input type="date" name="data-criacao" id="data-criacao">
+                </div>
+                
+    
+                <div id="nt-data-limite" class="col-md-6">
+                    <label for="data-limite">Data Limite:</label>
+                    <input type="date" name="data-limite" id="data-limite">
+                </div>
             </div>
-            <button type="submit" class="btn btn-light">filtrar</button>
+
+            <div class="bu-busca">
+                <button type="submit" class="btn btn-light" id="filtrar">Buscar </button>
+            </div>
         </div>
     </form>
 </div>
@@ -79,9 +84,9 @@ MyTasks
                                 <li>Prioridade: {{tarefa['tar_prioridade']}}</li>
                                 <li>Criação: {{tarefa['tar_data']}}</li>
                                 <li>Vencimento: {{tarefa['tar_data_limite']}}</li>
-                                <li><a href="{{ url_for('edit_task', task_id=tarefa['tar_id']) }}">editar</a></li> 
+                                <li><a href="{{ url_for('edit_task', task_id=tarefa['tar_id']) }}">editar</a></li>
                                 <li>
-                                    <form action="{{ url_for('delete_task', task_id=tarefa.tar_id) }}" method="POST" onsubmit="return confirm('Tem certeza que deseja deletar esta tarefa?');">
+                                    <form action="{{ url_for('delete_task', task_id=tarefa['tar_id']) }}" method="POST">
                                         <button type="submit" class="btn btn-danger btn-sm">Deletar</button>
                                     </form>
                                 </li>

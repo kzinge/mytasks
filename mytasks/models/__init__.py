@@ -1,5 +1,5 @@
 from flask import Flask
-from flask_login import UserMixin
+from flask_login import UserMixin, current_user
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_mysqldb import MySQL
 
@@ -86,13 +86,18 @@ class User(UserMixin): #definindo a classe usuario
         return users
     
     @classmethod
-    def get_by_email(cls,email): #pegar usuário pelo nome
+    def get_by_email(cls,email): #pegar usuário pelo email
         cursor = get_conexao()
         cursor.execute("SELECT usu_id,usu_nome,usu_email,usu_senha FROM tb_usuarios WHERE usu_email = %s", (email,))
         user = cursor.fetchone()
         cursor.close()
         return user
     
+    @classmethod
+    def get_username(cls):
+        if current_user.is_authenticated:
+            return current_user._nome
+
     
     
      # ----------métodos para manipular as tarefas--------------#
@@ -109,14 +114,14 @@ class User(UserMixin): #definindo a classe usuario
     @classmethod
     def get_tasks(cls, id):
         cursor = get_conexao()
-        cursor.execute("""SELECT tar_titulo, tar_descricao, tar_status, cat_categoria, tar_prioridade, tar_data, tar_data_limite FROM tb_tarefas JOIN tb_categorias ON tar_cat_id=cat_id WHERE tar_usu_id = %s""", (id,))
+        cursor.execute("""SELECT tar_id, tar_titulo, tar_descricao, tar_status, cat_categoria, tar_prioridade, tar_data, tar_data_limite FROM tb_tarefas JOIN tb_categorias ON tar_cat_id=cat_id WHERE tar_usu_id = %s""", (id,))
         tarefas = cursor.fetchall()
 
         cursor.close()
         return tarefas
         
     @classmethod
-    def get_filtros(cls, id, status=None, prioridade=None, categoria=None, data_limite=None, data_criacao=None):
+    def get_filtros(cls, id, status=None, prioridade=None, categoria=None, data_limite=None, data_criacao=None, palavra = None):
         cursor = get_conexao()
 
         # Query base
@@ -173,13 +178,25 @@ class User(UserMixin): #definindo a classe usuario
         
     @classmethod
     def delete_task(cls, task_id):
-       cursor = get_conexao()
+        cursor = get_conexao()
         try:
-            cursor.execute("DELETE FROM tb_tarefas WHERE tar_id = ?", (task_id,))
+            cursor.execute("DELETE FROM tb_tarefas WHERE tar_id = %s", (task_id,))
             commit_con()
-        except:
-            print(f"Erro ao excluir tarefa")
+        except Exception as e:
+            print(f"Erro ao excluir tarefa: {e}")
             return False
         finally:
             cursor.close()
         return True
+    
+    @classmethod
+    def busca_task(cls,chaves):
+        cursor = get_conexao()
+        cursor.execute("""
+        SELECT * FROM tb_tarefas WHERE  tar_descricao LIKE %s
+        """, )
+
+        busca = cursor.fetchall()
+        cursor.close()
+
+        return busca
